@@ -35,3 +35,38 @@
 - 개발은 Python으로 진행되어야 합니다. 서버를 구현하기 위한 프레임워크는 Flask를 이용합니다.
 
 ## 소프트웨어 구조 설계
+
+코드는 app.py, parser.py, templates/index.html로 이루어져 있습니다.
+- Flask로 개발되어있고, 서버를 담당하는 app.py
+- openAPI를 활용하여 실제로 데이터를 받아오는 메소드가 포함되어 있는 parser.py
+- 웹 브라우저에 표시할 화면이 구현되어 있는 templates/index.html
+
+우선 서버가 app.py에서 구동되면, parser.py의 parse 메소드를 호출합니다. parse 메소드는 인자에 따라 적절한 값을
+openAPI에 요청하고, 그 값을 다시 적절하게 변환하여 app.py의 list로 전달합니다. 그 후 전달 받은 값을 바탕으로
+flask에서 제공하는 메소드인 render_template를 통해 templates 폴더의 index를 호출하여 화면을 구현하게끔합니다.
+사용자가 URL로 접속하면, render_template가 실행되어 화면을 구현합니다.
+
+## 구현 설계
+
+### app.py
+- electric_bus_list : 전기버스인 버스의 차량 번호 목록입니다. 튜플로 구현됩니다.
+- bus_list : parse()에서 받아온 차량번호 값, 좌표값을 [차량번호, X좌표, Y좌표] 순대로 리스트화합니다.
+
+### parser.py
+- key : data.go.kr에서 받은 비밀 키입니다. github업로드를 위해 별도 파일로 분리했습니다.
+- url : REST API를 활용하기 위한 URL입니다. 기능에 따라 URL이 다르므로 각 기능에 따른 url이 mapping되어야 합니다.
+- param : REST API를 활용하기 위한 파라미터입니다. 요청 파라미터는 동일한 것만 사용하므로, 따로 변수로 만듭니다.
+- response_body : API에서 받아온 RAW한 xml body입니다.
+- root : python에서 제공하는 xml 라이브러리인 elementtree를 사용하여 구현한 xml의 가장 상위를 가리키는 변수입니다.
+
+### templates/index.py
+Daum API를 사용했고, 그 API와 관련된 내용은 생략합니다.
+- item : app.py에서 전달받은 bus_list의 개별 항목입니다. [차량번호, X좌표, Y좌표]순입니다.
+- loop.index : flask의 template engine인 jinja에서 제공하는 변수로, 현재 루프 정도를 1부터 나타냅니다.
+
+## 유닛 테스트
+![img](https://i.imgur.com/N1itdUA.jpg)
+parse.py의 기능만을 테스트했습니다. 차량번호와 좌표가 적절히 return 되는것을 확인 할 수 있습니다.
+
+## 통합 테스트
+[bus.noyrangj.in](bus.noryangj.in)에서 지금 확인할 수 있습니다.

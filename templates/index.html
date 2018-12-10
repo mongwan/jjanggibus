@@ -33,6 +33,14 @@
 
 		var markerImage = new daum.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
 
+		var markerImageUrlNormalBus = 'static/bus_icon.png',
+		    markerImageSizeNormalBus = new daum.maps.Size(20, 21), // 마커 이미지의 크기
+		    markerImageOptionsNormalBus = {
+		        offset : new daum.maps.Point(10, 21)// 마커 좌표에 일치시킬 이미지 안의 좌표
+		    };
+
+		var markerImageNormalBus = new daum.maps.MarkerImage(markerImageUrlNormalBus, markerImageSizeNormalBus, markerImageOptionsNormalBus);
+
         {% for item in bus_list %}
             {% if item[0] in electric_bus_list %}
                 var marker{{ loop.index }} = new daum.maps.Marker({
@@ -41,6 +49,12 @@
                     map: map // 마커를 표시할 지도 객체
                 });
                 console.log({{ item[0] }}, {{ item[1] }}, {{ item[2] }});
+            {% else %}
+                var marker{{ loop.index }} = new daum.maps.Marker({
+                    position: new daum.maps.LatLng({{ item[1] }}, {{ item[2] }}), // 마커의 좌표
+                    image : markerImageNormalBus, // 마커의 이미지
+                    map: map // 마커를 표시할 지도 객체
+                });
             {% endif %}
         {% endfor %}
 

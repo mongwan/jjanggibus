@@ -3,12 +3,14 @@ from urllib import request
 import xml.etree.ElementTree as ET
 
 
-def parse(route_id=100100185, function='getLowBusPos'):
+def parse(route_id=100100185, function='getBusPos'):
     key = open('secretKey', 'r').readline()  # github 업로드를 위해 시크릿키 파일을 분리했습니다.
     # 국민대학교 정류장 고유번호 : 08110
 
     if function == 'getLowBusPos':  # plainNo
         url = 'http://ws.bus.go.kr/api/rest/buspos/getLowBusPosByRtid?'
+    elif function == 'getBusPos':
+        url = 'http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid?'
     elif function == 'getAll':
         url = 'http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll?'
     else:
@@ -28,7 +30,7 @@ def parse(route_id=100100185, function='getLowBusPos'):
 
 
 if __name__ == "__main__":
-    bus_list = [(re.findall(r"\d+", i.findtext('plainNo'))[1], i.findtext('tmX'), i.findtext('tmY')) for i in parse()]
+    bus_list = [(re.findall(r"\d+", i.findtext('plainNo'))[1], i.findtext('gpsX'), i.findtext('gpsY')) for i in parse()]
 
     for i in bus_list:
         print(i)

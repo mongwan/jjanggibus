@@ -11,7 +11,7 @@ electric_bus_list = (
 
 @app.route('/')
 def main_page():
-    bus_list = [(re.findall(r"\d+", i.findtext('plainNo'))[1], i.findtext('tmY'), i.findtext('tmX')) for i in parse()]
+    bus_list = [(re.findall(r"\d+", i.findtext('plainNo'))[1], i.findtext('gpsY'), i.findtext('gpsX')) for i in parse()]
     return render_template('index.html',
                            bus_list=bus_list,
                            electric_bus_list=electric_bus_list
