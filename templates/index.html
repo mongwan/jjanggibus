@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>짱기버스넘무조아</title>
+    <meta charset="utf-8", name="viewport", content="width=device-width">
+    <link rel='stylesheet', href='static/style.css'>
+
+    <style>
+        #map {
+            width : 100vw;
+            height : 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f73ca18a49dd83d6d482d0c368dd7fdf"></script>
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new daum.maps.LatLng(37.55098, 126.98298),
+            level: 7,
+            mapTypeId : daum.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new daum.maps.Map(mapContainer, mapOption);
+
+		var markerImageUrl = 'static/electric_bus_icon.png',
+		    markerImageSize = new daum.maps.Size(40, 42), // 마커 이미지의 크기
+		    markerImageOptions = {
+		        offset : new daum.maps.Point(20, 42)// 마커 좌표에 일치시킬 이미지 안의 좌표
+		    };
+
+		var markerImage = new daum.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+
+        {% for item in bus_list %}
+            {% if item[0] in electric_bus_list %}
+                var marker{{ loop.index }} = new daum.maps.Marker({
+                    position: new daum.maps.LatLng({{ item[1] }}, {{ item[2] }}), // 마커의 좌표
+                    image : markerImage, // 마커의 이미지
+                    map: map // 마커를 표시할 지도 객체
+                });
+                console.log({{ item[0] }}, {{ item[1] }}, {{ item[2] }});
+            {% endif %}
+        {% endfor %}
+
+    </script>
+</body>
+</html>

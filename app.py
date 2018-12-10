@@ -1,21 +1,22 @@
-from flask import Flask
-import json
+from flask import Flask, render_template
+import re
 from parser import parse
 
 app = Flask(__name__)
 
+electric_bus_list = (
+    '3744', '6443', '9411', '5007', '1902'
+)
+
 
 @app.route('/')
 def main_page():
-    t = 1
-    bus_stop_list = []
-
-    for i in parse():
-        bus_stop_list.append(["busStop{}".format(t), i])
-        t += 1
-
-    return json.dumps(dict(bus_stop_list))
+    bus_list = [(re.findall(r"\d+", i.findtext('plainNo'))[1], i.findtext('tmY'), i.findtext('tmX')) for i in parse()]
+    return render_template('index.html',
+                           bus_list=bus_list,
+                           electric_bus_list=electric_bus_list
+                           )
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
