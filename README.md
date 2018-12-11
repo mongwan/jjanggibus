@@ -69,4 +69,4 @@ Daum API를 사용했고, 그 API와 관련된 내용은 생략합니다.
 parse.py의 기능만을 테스트했습니다. 차량번호와 좌표가 적절히 return 되는것을 확인 할 수 있습니다.
 
 ## 통합 테스트
-[bus.noyrangj.in](bus.noryangj.in)에서 지금 확인할 수 있습니다.
+[bus.noryangj.in](bus.noryangj.in)에서 지금 확인할 수 있습니다.
